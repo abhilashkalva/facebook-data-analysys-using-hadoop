@@ -1,0 +1,53 @@
+[abhilashkalva@gw02 ~]$ hadoop fs -mkdir facebookdata
+[abhilashkalva@gw02 ~]$ hadoop fs -put pseudo_facebook.csv facebookdata
+[abhilashkalva@gw02 ~]$ hadoop fs -ls facebookdata
+
+-----
+[abhilashkalva@gw02 ~]$ hive
+hive> create database fbdata;
+hive> use fbdata;
+hive> create table fb(id int, age int, day int, year int, month int, gender string, tenure int, friends int, friend_init int, likes int, likes_recd, mlikes int,mlikes_recd, wlikes int, wlikes_recd int) row format delimited fields terminated by ',' stored as textfile location '/user/abhilashkalva/facebookdata/' ;
+hive> select * from fb limit 2;
+
+Problem statement:1
+
+Find out the total number of users in this dataset
+
+hive> select count(*) from fb;
+---------------------------------------------------------
+Problem statement:2
+
+Find out the number of facebook users above the age of 25
+
+hive> select * from fb where age>25;
+--------------------------------------------------------------
+Problem statement:3
+
+Do male facebook users tend to have more friends, or female users?
+
+hive> select gender,avg(friends) from fb where group by gender;
+----------------------------------------------------------------------
+Problem statement:4
+
+How many likes do young people receive on facebook oppose to older members
+
+avg of young people received likes : hive> select avg(likes_recd) from fb where age>=13 and age>=25;
+avg of older people receive likes :   hive> select avg(likes_recd) from fb where age>=35;
+------------------------------------------------------------------------
+Problem statement:5
+
+Find out the count of facebook users for each birthday month
+
+hive> select month, count(*) from fb group by month;
+------------------------------------------------------------------------
+Problem statement:6
+
+Do young members use mobile phones or computers for facebook browsing?
+
+hive> select avg(mlikes),avg(wlikes) from fb where age>=13 AND age<=25;
+--------------------------------------------------------------------------
+Problem statement:7
+
+Do adult members use mobile phones or computers for facebook browsing?
+
+hive>select avg(mlikes),avg(wlikes) from fb where age>=35;
